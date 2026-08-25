@@ -1,0 +1,217 @@
+<!DOCTYPE html>
+<html lang="tl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SSW2 Business Career - Mock Exam 1</title>
+<style>
+body{font-family:Arial,sans-serif;background:#f5f5f5;margin:0;color:#222}
+.container{max-width:900px;margin:auto;padding:20px}
+header{background:#fff;padding:20px;border-radius:12px;margin-bottom:15px;position:sticky;top:0;z-index:10;box-shadow:0 2px 8px #0001}
+h1{font-size:22px;margin:0 0 10px}
+#timer{font-size:28px;font-weight:bold}
+.question{background:#fff;padding:18px;margin:14px 0;border-radius:12px}
+.jp{font-size:18px;line-height:2.15}.jp ruby{ruby-position:over}.jp rt{font-size:0.42em;line-height:1;color:#555;font-weight:normal}
+.choice{display:block;padding:10px;margin:8px 0;border:1px solid #ddd;border-radius:8px;cursor:pointer}
+.choice:hover{background:#f0f0f0}
+button{border:0;border-radius:9px;padding:13px 20px;font-size:16px;cursor:pointer;background:#111;color:#fff}
+#result{display:none;background:#fff;padding:20px;border-radius:12px;margin-top:15px}
+.explanation{display:none;background:#f7f7f7;padding:12px;border-radius:8px;margin-top:10px}
+.correct{border-left:5px solid #198754}.wrong{border-left:5px solid #dc3545}
+.small{color:#666}
+</style>
+</head>
+<body>
+<div class="container">
+<header>
+<h1>SSW2 Business Career / Operation — Mock Exam 1</h1>
+<div>36 questions • Actual exam simulation</div>
+<div>Time remaining: <span id="timer">--:--</span></div>
+</header>
+
+<div id="quiz"></div>
+<button id="submit">Submit</button>
+<div id="result"></div>
+</div>
+
+<script>
+/*
+  IMPORTANT:
+  The source provided in the conversation contains 36 questions, but it does
+  not state the exact official exam duration. Set EXAM_MINUTES to the official
+  duration before using this as a timed simulation.
+*/
+const EXAM_MINUTES = 100;
+
+const questions = [
+{q:"問題15 機械（きかい）・装置（そうち）以外（いがい）で設備（せつび）管理（かんり）の対象（たいしょう）となる設備（せつび）として最も（もっとも）適切（てきせつ）なものは、次（つぎ）のうちどれか。",
+c:["ア．工具（こうぐ）","イ．原材料（げんざいりょう）","ウ．知的（ちてき）財産（ざいさん）","エ．有価（ゆうか）証券（しょうけん）"],a:0,e:"Tools (工具・こうぐ) are the equipment used to perform the work.（こうぐ） ay mga gamit o tools na ginagamit sa trabaho. Kasama ito sa mga bagay na minamanage sa 設備管理（せつびかんり）.",k:"工具（こうぐ）＝dụk dụng / tools; 設備管理（せつびかんり）＝pamamahala ng equipment"},
+{q:"ISO9000シリーズに関する（かんする）記述（きじゅつ）として最も（もっとも）不適切（ふてきせつ）なものは、次（つぎ）のうちどれか。",
+c:["ア．ISO9001は、品質（ひんしつ）マネジメントシステムの要求（ようきゅう）事項（じこう）を表して（あらわして）いる。","イ．ISO9000シリーズは、品質（ひんしつ）マネジメントシステムの国際（こくさい）規格（きかく）である。","ウ．JISは、ISO9000シリーズとは独立（どくりつ）した規格（きかく）である。","エ．品質（ひんしつ）マネジメントシステムは、経営（けいえい）管理（かんり）の一環（いっかん）として取り入れ（とりいれ）られている。"],a:2,e:"Ang paliwanag na mali ay ang pagsasabing hiwalay at walang kaugnayan ang JIS sa ISO. May mga JIS na nakaayon o isinalin mula sa ISO standards.",k:"ISO9001（アイエスオーきゅうせんいち）＝QMS requirements; JIS（ジス）＝Japanese Industrial Standards"},
+{q:"動作（どうさ）経済（けいざい）の原則（げんそく）に関する（かんする）記述（きじゅつ）として最も（もっとも）不適切（ふてきせつ）なものは、次（つぎ）のうちどれか。",
+c:["ア．工具（こうぐ）や材料（ざいりょう）は、同じ（おなじ）作業（さぎょう）を繰り返し（くりかえし）行う（おこなう）場合（ばあい）でも、作業（さぎょう）実績（じっせき）に合わせ（あわせ）て常に（つねに）置く（おく）位置（いち）を変更（へんこう）すべきである。","イ．材料（ざいりょう）を使用（しよう）点（てん）の近く（ちかく）に運ぶ（はこぶ）には、重力（じゅうりょく）利用（りよう）の装置（そうち）を使用（しよう）すべきである。","ウ．できるだけ楽（らく）で自然（しぜん）なリズムで仕事（しごと）ができるように仕事（しごと）をアレンジする。","エ．両手（りょうて）の動作（どうさ）は同時（どうじ）に始め（はじめ）、また、同時（どうじ）に終了（しゅうりょう）すべきである。"],a:0,e:"Sa paulit-ulit na trabaho, mas mabuting manatiling pare-pareho ang lokasyon ng tools at materials para mabilis itong kunin. Mali ang palaging pagpapalit ng puwesto.",k:"動作経済（どうさけいざい）＝pagbawas ng unnecessary movements"},
+{q:"問題24 倉庫（そうこ）の機能（きのう）別（べつ）分類（ぶんるい）として不適切（ふてきせつ）なものは、次（つぎ）のうちどれか。",
+c:["ア．流通（りゅうつう）加工（かこう）型（がた）センター","イ．自動（じどう）倉庫（そうこ）型（がた）センター","ウ．通過（つうか）型（がた）センター","エ．在庫（ざいこ）型（がた）センター"],a:1,e:"Ang functional classification ng warehouse ay gaya ng 流通加工（りゅうつうかこう）型, 通過（つうか）型 at 在庫（ざいこ）型. Ang 自動倉庫（じどうそうこ）型 ay classification ayon sa equipment/operating method.",k:"倉庫（そうこ）の機能（きのう）＝流通加工（りゅうつうかこう）・通過（つうか）・在庫（ざいこ）"},
+{q:"問題36 生産（せいさん）計画（けいかく）・統制（とうせい）での「目（め）で見る（みる）管理（かんり）」として不適切（ふてきせつ）なものは、次（つぎ）のうちどれか。",
+c:["ア．製造（せいぞう）三角（さんかく）図（ず）や流動（りゅうどう）数（すう）曲線（きょくせん）などを利用（りよう）して計画（けいかく）と実績（じっせき）の進捗（しんちょく）を管理（かんり）する。","イ．管理（かんり）盤（ばん）などで生産（せいさん）に従事（じゅうじ）する複数（ふくすう）の担当（たんとう）者（しゃ）の動き（うごき）を同時（どうじ）に管理（かんり）する。","ウ．目視（もくし）検査（けんさ）において、ガラス瓶（がらすびん）のカケを発見（はっけん）しやすくするように背後（はいご）の光量（ひかりょう）を管理（かんり）する。","エ．電光（でんこう）掲示板（けいじばん）などで現時点（げんじてん）での目標（もくひょう）生産（せいさん）量（りょう）と生産（せいさん）実績（じっせき）などを確認（かくにん）する。"],a:2,e:"Ang ウ ay tungkol sa ilaw para sa visual inspection. Hindi ito direktang kabilang sa visual management para sa production planning at control.",k:"目で見る管理（めでみるかんり）＝pagpapakita ng progress at actual results"},
+{q:"問題23 物流（ぶつりゅう）に関する（かんする）記述（きじゅつ）として不適切（ふてきせつ）なものは、次（つぎ）のうちどれか。",
+c:["ア．物流（ぶつりゅう）の構成（こうせい）要素（ようそ）には、輸送（ゆそう）、保管（ほかん）、荷役（にやく）、包装（ほうそう）、流通（りゅうつう）加工（かこう）、情報（じょうほう）などがある。","イ．物流（ぶつりゅう）は現象（げんしょう）的（てき）にはモノの流れ（ながれ）であり、経済（けいざい）的（てき）性格（せいかく）の商（しょう）流（りゅう）とは全く（まったく）関係（かんけい）がない。","ウ．物流（ぶつりゅう）とは物的（ぶってき）流通（りゅうつう）のことであり、経済（けいざい）においては取引（とりひき）流通（りゅうつう）や資金（しきん）の流れ（ながれ）と対（たい）をなすものである。","エ．物流（ぶつりゅう）は目的（もくてき）別（べつ）に、調達（ちょうたつ）物流（ぶつりゅう）、生産（せいさん）物流（ぶつりゅう）、販売（はんばい）物流（ぶつりゅう）、回収（かいしゅう）物流（ぶつりゅう）、消費（しょうひ）者（しゃ）物流（ぶつりゅう）の5つに大別（たいべつ）される。"],a:1,e:"Magkaiba ang 物流（ぶつりゅう） at 商流（しょうりゅう）, pero hindi ibig sabihin na wala silang relasyon. Magkaugnay sila sa daloy ng produkto at transaksyon.",k:"物流（ぶつりゅう）＝daloy ng goods; 商流（しょうりゅう）＝daloy ng transactions"},
+{q:"問題19 設備（せつび）保全（ほぜん）の活動（かつどう）に関する（かんする）記述（きじゅつ）として不適切（ふてきせつ）なものは、次（つぎ）のうちどれか。",
+c:["ア．様々（さまざま）な故障（こしょう）に対応（たいおう）するために点検（てんけん）周期（しゅうき）はランダムにする。","イ．点検（てんけん）項目（こうもく）を明確（めいかく）にするために点検（てんけん）表（ひょう）を作成（さくせい）する。","ウ．設備（せつび）を扱う（あつかう）作業（さぎょう）者（しゃ）に5Sを徹底（てってい）させる。","エ．故障（こしょう）を予防（よぼう）するために事前（じぜん）に保守（ほしゅ）を行う（おこなう）。"],a:0,e:"Ang inspection period ay dapat planado ayon sa kondisyon at standards ng equipment. Hindi dapat random ang schedule ng inspection.",k:"保全（ほぜん）＝inspection・prevention・5S"},
+{q:"問題31 原価（げんか）に関する（かんする）記述（きじゅつ）として最も（もっとも）不適切（ふてきせつ）なものは、次（つぎ）のうちどれか。",
+c:["ア．成行（しげゆき）原価（げんか）とは、現行（げんこう）の技術（ぎじゅつ）を基（もと）に見積もっ（みつもっ）た原価（げんか）である。","イ．理（り）没（ぼつ）原価（げんか）とは、代替（だいたい）案（あん）の選択（せんたく）において棄却（ききゃく）された代替（だいたい）案（あん）を、選択（せんたく）して生じる（しょうじる）と考え（かんがえ）られる最大（さいだい）の利益（りえき）である。","ウ．標準（ひょうじゅん）原価（げんか）とは、標準（ひょうじゅん）の能率（のうりつ）や生産（せいさん）性（せい）、標準（ひょうじゅん）の原価（げんか）率（りつ）を適用（てきよう）する原価（げんか）である。","エ．部分（ぶぶん）原価（げんか）とは、計算（けいさん）目的（もくてき）によって特定（とくてい）の原価（げんか）要素（ようそ）だけを集計（しゅうけい）した原価（げんか）である。"],a:1,e:"Ang 理没原価（りぼつげんか）は tumutukoy sa benepisyong maaaring makuha mula sa alternatibong hindi pinili, kaya ang ibinigay na definition sa choice ay mali.",k:"成行原価（しげゆきげんか）＝current technology; 標準原価（ひょうじゅんげんか）＝standard conditions"},
+{q:"問題4 …再生（さいせい）して動作（どうさ）研究（けんきゅう）を行う（おこなう）とき、動作（どうさ）研究（けんきゅう）で検討（けんとう）できない項目（こうもく）は、次（つぎ）のうちどれか。",
+c:["ア．サーブリックごとの発生（はっせい）頻度（ひんど）","イ．作業（さぎょう）を行う（おこなう）ために必要（ひつよう）な動作（どうさ）の要素（ようそ）とその所要（しょよう）時間（じかん）","ウ．組立（くみたて）作業（さぎょう）の作業（さぎょう）者（しゃ）別（べつ）稼働（かどう）率（りつ）","エ．無駄（むだ）な動作（どうさ）の少ない（すくない）組立（くみたて）作業（さぎょう）における動作（どうさ）順序（じゅんじょ）"],a:2,e:"Ang 動作研究（どうさけんきゅう） ay pagsusuri ng uri, pagkakasunod-sunod at dalas ng movements. Ang utilization rate ng bawat worker ay mas kabilang sa ibang uri ng work/utilization analysis.",k:"動作研究（どうさけんきゅう）＝elements・sequence・frequency ng movement"},
+{q:"問題3 作業（さぎょう）管理（かんり）に含まれて（ふくまれて）いる活動（かつどう）の内容（ないよう）として最も（もっとも）不適切（ふてきせつ）なものは、どれか。",
+c:["ア．作業（さぎょう）の改善（かいぜん）","イ．不適合（ふてきごう）品（ひん）の改善（かいぜん）","ウ．標準（ひょうじゅん）作業（さぎょう）と標準（ひょうじゅん）時間（じかん）の設定（せってい）","エ．標準（ひょうじゅん）の維持（いじ）"],a:1,e:"Ang pagpapabuti ng 不適合品（ふてきごうひん） ay pangunahing sakop ng quality control. Ang 作業管理（さぎょうかんり） ay nakatuon sa standard work, standard time, maintenance at improvement ng trabaho.",k:"作業管理（さぎょうかんり）＝standard work・standard time・improvement・maintenance"},
+{q:"問題34 納期（のうき）遅延（ちえん）を防止（ぼうし）するためのポイントに関する（かんする）記述（きじゅつ）として最も（もっとも）不適切（ふてきせつ）なものは、次（つぎ）のうちどれか。",
+c:["ア．生産（せいさん）計画（けいかく）を立案（りつあん）する際（さい）には、あらかじめ飛び込み（とびこみ）注文（ちゅうもん）が入る（はいる）ことを想定（そうてい）せず、厳密（げんみつ）に計画（けいかく）することが重要（じゅうよう）である。","イ．製造（せいぞう）部門（ぶもん）では、生産（せいさん）統制（とうせい）における進捗（しんちょく）管理（かんり）及び（および）現品（げんぴん）管理（かんり）が重要（じゅうよう）である。","ウ．資材（しざい）部門（ぶもん）では、調達（ちょうたつ）品（ひん）が納期（のうき）どおりに納入（のうにゅう）されるように管理（かんり）することが重要（じゅうよう）である。","エ．設計（せっけい）部門（ぶもん）では、設計（せっけい）作業（さぎょう）の進捗（しんちょく）管理（かんり）が重要（じゅうよう）である"],a:0,e:"Para maiwasan ang late delivery, kailangang isaalang-alang ang pagbabago tulad ng biglaang orders at maglaan ng sapat na allowance/capacity.",k:"納期（のうき）＝progress control・現品管理（げんぴんかんり）・procurement control"},
+{q:"問題20 資材（しざい）管理（かんり）の意義（いぎ）及び（および）構成（こうせい）に関する（かんする）記述（きじゅつ）として最も（もっとも）適切（てきせつ）なものは、どれか。",
+c:["ア．生産（せいさん）管理（かんり）の面（めん）では必要（ひつよう）ない。","イ．分類（ぶんるい）する仕方（しかた）によらず管理（かんり）は変わら（かわら）ない。","ウ．資材（しざい）業務（ぎょうむ）の内容（ないよう）は、要求（ようきゅう）、調達（ちょうたつ）、受入（うけいれ）検収（けんしゅう）、保管（ほかん）という順序（じゅんじょ）で実施（じっし）される。","エ．購買（こうばい）、外注（がいちゅう）、マーケティング…"],a:2,e:"Ang tamang flow ng material work ay 要求（ようきゅう）→ 調達（ちょうたつ）→ 受入・検収（うけいれ・けんしゅう）→ 保管（ほかん）.",k:"要求（ようきゅう）→調達（ちょうたつ）→受入・検収（うけいれ・けんしゅう）→保管（ほかん）"},
+{q:"問題33 製造（せいぞう）業（ぎょう）における原価（げんか）低減（ていげん）に関する（かんする）記述（きじゅつ）として最も（もっとも）適切（てきせつ）なものは、次（つぎ）のうちどれか。",
+c:["ア．直接（ちょくせつ）材料（ざいりょう）費（ひ）の原価（げんか）低減（ていげん）の対策（たいさく）として、VEによる材質（ざいしつ）の見直し（みなおし）が有効（ゆうこう）である。","イ．直接（ちょくせつ）材料（ざいりょう）費（ひ）の原価（げんか）低減（ていげん）の対策（たいさく）として、付加（ふか）価値（かち）を生ま（うま）ない時間（じかん）の短縮（たんしゅく）が有効（ゆうこう）である。","ウ．直接（ちょくせつ）労務（ろうむ）費（ひ）の原価（げんか）低減（ていげん）の対策（たいさく）として、より安価（あんか）な代替（だいたい）材料（ざいりょう）の検討（けんとう）をすべきである。","エ．直接（ちょくせつ）労務（ろうむ）費（ひ）の原価（げんか）低減（ていげん）の対策（たいさく）として、材料（ざいりょう）調達（ちょうたつ）方法（ほうほう）の見直し（みなおし）を検討（けんとう）すべきである。"],a:0,e:"Para mabawasan ang direct material cost, epektibong paraan ang pag-review ng material/specification gamit ang VE.",k:"VE（ブイイー）＝pagbaba ng cost habang pinapanatili ang value"},
+{q:"問題22 集中（しゅうちゅう）購買（こうばい）方式（ほうしき）と分散（ぶんさん）購買（こうばい）方式（ほうしき）のそれぞれの利点（りてん）に関する（かんする）記述（きじゅつ）として不適切（ふてきせつ）なものは、次（つぎ）のうちどれか。",
+c:["ア．集中（しゅうちゅう）購買（こうばい）方式（ほうしき）では、集中（しゅうちゅう）発注（はっちゅう）により購買（こうばい）価格（かかく）の引き下げ（ひきさげ）ができる。","イ．集中（しゅうちゅう）購買（こうばい）方式（ほうしき）では、購買（こうばい）事務（じむ）手続（てつづ）きを統一（とういつ）できる。","ウ．分散（ぶんさん）購買（こうばい）方式（ほうしき）では、資材（しざい）の標準（ひょうじゅん）化（か）が容易（ようい）となる。","エ．分散（ぶんさん）購買（こうばい）方式（ほうしき）では、各（かく）工場（こうじょう）が立地（りっち）する地域（ちいき）企業（きぎょう）に貢献（こうけん）できる。"],a:2,e:"Mas madaling i-standardize ang materials sa 集中購買（しゅうちゅうこうばい）. Ang 分散購買（ぶんさんこうばい） naman ay may advantage sa pag-angkop sa local conditions.",k:"集中購買（しゅうちゅうこうばい）＝price・procedure・standardization; 分散購買（ぶんさんこうばい）＝local response"},
+{q:"問題30 下図（したず）のa〜dに入る（はいる）用語（ようご）の組合せ（くみあわせ）として適切（てきせつ）なものは、次（つぎ）のうちどれか。",
+c:["ア．a：原価（げんか）低減（ていげん） b：原価（げんか）改善（かいぜん） c：原価（げんか）企画（きかく） d：ABC","イ．a：原価（げんか）低減（ていげん） b：原価（げんか）企画（きかく） c：原価（げんか）改善（かいぜん） d：標準（ひょうじゅん）原価（げんか）計算（けいさん）","ウ．a：原価（げんか）改善（かいぜん） b：原価（げんか）低減（ていげん） c：原価（げんか）企画（きかく） d：ABC","エ．a：原価（げんか）改善（かいぜん） b：原価（げんか）低減（ていげん） c：原価（げんか）企画（きかく） d：標準（ひょうじゅん）原価（げんか）計算（けいさん）"],a:3,e:"Sa source na ito, hindi kasama ang mismong diagram kaya hindi 100% mabe-verify ang a〜d mula sa larawan. Ang ginamit na sagot ay batay sa ibinigay na choices, kung saan エ ang itinakda.",k:"原価企画（げんかきかく）＝design stage; 原価改善（げんかかいぜん）＝mass-production stage"},
+{q:"問題36 納期（のうき）遅延（ちえん）防止（ぼうし）を目的（もくてき）とした「目（め）で見る（みる）管理（かんり）」に関する（かんする）記述（きじゅつ）として不適切（ふてきせつ）なものは、次（つぎ）のうちどれか。",
+c:["ア．電光（でんこう）掲示板（けいじばん）等（とう）により、現在（げんざい）の目標（もくひょう）生産（せいさん）量（りょう）や生産（せいさん）実績（じっせき）量（りょう）を表示（ひょうじ）して、作業（さぎょう）者（しゃ）が瞬時（しゅんじ）に分かる（わかる）ようにする。","イ．作業（さぎょう）管理（かんり）盤（ばん）のジョブカードを使っ（つかっ）て、計画（けいかく）の進捗（しんちょく）状況（じょうきょう）や変更（へんこう）を、現場（げんば）監督（かんとく）者（しゃ）の机（つくえ）の上（うえ）で見（み）られるようにする。","ウ．工場（こうじょう）内（ない）に保管（ほかん）している材料（ざいりょう）・部品（ぶひん）について、何（なに）が、どこに、どれだけ置い（おいて）てあるかが識別（しきべつ）できるように表示（ひょうじ）する。","エ．スペース効率（こうりつ）や運搬（うんぱん）効率（こうりつ）を高める（たかめる）ために、材料（ざいりょう）・部品（ぶひん）の保管（ほかん）場所（ばしょ）、パレット置場（おきば）、運搬（うんぱん）通路（つうろ）等（とう）を表示（ひょうじ）する。"],a:1,e:"Ang 目で見る管理（めでみるかんり） ay dapat madaling makita agad ng mga tao sa production floor. Kung nasa mesa lang ng supervisor makikita, hindi ito magandang visual management.",k:"見える化（みえるか）＝agad na nakikita sa production floor"},
+{q:"問題20 原価（げんか）に関する（かんする）記述（きじゅつ）として最も（もっとも）不適切（ふてきせつ）なものは、次（つぎ）のうちどれか。",
+c:["ア．実際（じっさい）原価（げんか）は、実際（じっさい）価格（かかく）又は（または）予定（よてい）価格（かかく）と予定（よてい）消費（しょうひ）量（りょう）の積（せき）である。","イ．標準（ひょうじゅん）原価（げんか）は、標準（ひょうじゅん）の操業（そうぎょう）度（ど）において、標準（ひょうじゅん）の方法（ほうほう）に対して（たいして）、標準（ひょうじゅん）の能率（のうりつ）と標準（ひょうじゅん）の原価（げんか）率（りつ）を適用（てきよう）して算出（さんしゅつ）する。","ウ．目標（もくひょう）原価（げんか）は、製品（せいひん）設計（せっけい）段階（だんかい）でのコストダウン目標（もくひょう）として設定（せってい）する。","エ．成行（しげゆき）原価（げんか）は、製品（せいひん）設計（せっけい）の初期（しょき）段階（だんかい）において算出（さんしゅつ）する。"],a:0,e:"Ang 実際原価（じっさいげんか） ay batay sa aktuwal na presyong at aktuwal na quantity/consumption na nangyari. Kaya mali ang choice na gumagamit ng planned consumption.",k:"実際原価（じっさいげんか）＝actual price・actual quantity"},
+{q:"時間（じかん）研究（けんきゅう）に関する（かんする）記述（きじゅつ）として最も（もっとも）不適切（ふてきせつ）なものは、次（つぎ）のうちどれか。",
+c:["ア．同じ（おなじ）作業（さぎょう）に従事（じゅうじ）する複数（ふくすう）の作業（さぎょう）者（しゃ）を対象（たいしょう）にした時間（じかん）研究（けんきゅう）では、各（かく）作業（さぎょう）者（しゃ）の作業（さぎょう）ペースが異なる（ことなる）ことから、その作業（さぎょう）の標準（ひょうじゅん）的（てき）な正味（しょうみ）時間（じかん）を定める（さだめる）ことはできない。","イ．フィルム、デジタルビデオなどの記録（きろく）方式（ほうしき）に関係（かんけい）なく、動画（どうが）を利用（りよう）した時間（じかん）研究（けんきゅう）では、画面（がめん）のフレーム数（すう）を換算（かんさん）して時間（じかん）を求める（もとめる）こととなる。","ウ．繰返し（くりかえし）作業（さぎょう）を対象（たいしょう）とする時間（じかん）研究（けんきゅう）の測定（そくてい）中（ちゅう）に、予定（よてい）外（がい）の作業（さぎょう）が発生（はっせい）した場合（ばあい）、この例外（がい）作業（さぎょう）の終了（しゅうりょう）時刻（じこく）を欄外（らんがい）に記入（きにゅう）し、集計（しゅうけい）では、要素（ようそ）作業（さぎょう）の観測（かんそく）データには含め（ふくめ）ない。","エ．ストップウォッチ法（ほう）による測定（そくてい）方法（ほう）は、継続（けいぞく）法（ほう）と早（はや）戻し（もどし）法（ほう）が代表（だいひょう）的（てき）であるが、使用（しよう）するストップウォッチにラップタイムの記憶（きおく）と表示（ひょうじ）の機能（きのう）があることから、これを利用（りよう）するとよい。"],a:0,e:"Sa time study, maaaring gumamit ng rating para ma-adjust ang bilis ng bawat worker at makuha ang standard net time. Kaya mali ang pagsasabing hindi ito maaaring gawin.",k:"時間研究（じかんけんきゅう）＝measurement＋rating＋standard time"},
+{q:"問題28 検査（けんさ）の考え方（かんがえかた）に関する（かんする）記述（きじゅつ）として最も（もっとも）不適切（ふてきせつ）なものは、次（つぎ）のうちどれか。",
+c:["ア．外注（がいちゅう）からの受入（うけいれ）検査（けんさ）は、全数（ぜんすう）検査（けんさ）を行う（おこなう）ことが原則（げんそく）である。","イ．抜取（ぬきとり）検査（けんさ）は、製品（せいひん）価格（かかく）が安く（やすく）ある程度（ていど）の不適合（ふてきごう）品（ひん）の混入（こんにゅう）が許さ（ゆるさ）れる場合（ばあい）に適用（てきよう）される。","ウ．合格（ごうかく）にすべきロットを不（ふ）合格（ごうかく）にしてしまう誤り（あやまり）は、生産（せいさん）者（しゃ）危険（きけん）である。","エ．全数（ぜんすう）検査（けんさ）は、必ずしも（かならずしも）全（ぜん）製品（せいひん）が適合（てきごう）品（ひん）であることを保証（ほしょう）できない。"],a:0,e:"Sa outsourced items, hindi laging 100% inspection ang kailangan. Depende sa quality, cost at risk, maaaring gumamit ng sampling inspection.",k:"抜取検査（ぬきとりけんさ）＝pag-check ng bahagi ng lot"},
+{q:"PDCAサイクルの各（かく）項目（こうもく）とISO14001:2015 環境（かんきょう）マネジメントシステムの要求（ようきゅう）事項（じこう）の対応（たいおう）として最も（もっとも）不適切（ふてきせつ）なものは、次（つぎ）のうちどれか。",
+c:["ア．Plan － 計画（けいかく）","イ．Do － 支援（しえん）及び（および）運用（うんよう）","ウ．Act － 実施（じっし）","エ．Check － パフォーマンス評価（ひょうか）"],a:2,e:"Sa PDCA, ang Plan ay pagpaplano, Do ay pagpapatupad, Check ay pagsusuri at Act ay improvement/correction. Kaya mali ang paglalagay ng 実施（じっし） sa Act.",k:"PDCA＝Plan（計画・けいかく）→Do（実施・じっし）→Check（評価・ひょうか）→Act（改善・かいぜん）"},
+{q:"問題18 設備（せつび）の劣化（れっか）により生じる（しょうじる）損失（そんしつ）として最も（もっとも）不適切（ふてきせつ）なものは、次（つぎ）のうちどれか。",
+c:["ア．安全（あんぜん）性（せい）が低下（ていか）する。","イ．製造（せいぞう）コストが低下（ていか）する。","ウ．企業（きぎょう）の信頼（しんらい）が低下（ていか）する。","エ．生産（せいさん）量（りょう）が低下（ていか）する。"],a:1,e:"Ang equipment deterioration ay maaaring magdulot ng pagbaba ng safety, reliability at production volume. Hindi ito nangangahulugang bababa ang manufacturing cost.",k:"設備劣化（せつびれっか）＝masamang epekto sa safety・reliability・production"},
+{q:"問題36 生産（せいさん）計画（けいかく）・統制（とうせい）における目（め）で見る（みる）管理（かんり）に関する（かんする）記述（きじゅつ）として最も（もっとも）適切（てきせつ）なものは、次（つぎ）のうちどれか。",
+c:["ア．倉庫（そうこ）の流入（りゅうにゅう）と流出（りゅうしゅつ）を示し（しめし）た流動（りゅうどう）数（すう）曲線（きょくせん）における、２つの曲線（きょくせん）の差（さ）は、在庫（ざいこ）量（りょう）を表す（あらわす）。","イ．製造（せいぞう）三角（さんかく）図（ず）では、横（よこ）軸（じく）に時間（じかん）の目盛り（めもり）、縦（たて）軸（じく）に累積（るいせき）在庫（ざいこ）量（りょう）をとる。","ウ．ガントチャートとは、工数（こうすう）計画（けいかく）や余力（よりょく）管理（かんり）などのために用い（もちい）られる図表（ずひょう）である。","エ．管理（かんり）盤（ばん）は、作業（さぎょう）者（しゃ）別（べつ）又は（または）機械（きかい）別（べつ）の作業（さぎょう）予定（よてい）の指示（しじ）、現品（げんぴん）管理（かんり）及び（および）統制（とうせい）について、作業（さぎょう）伝票（でんぴょう）などを用い（もちい）て行う（おこなう）表示（ひょうじ）盤（ばん）である。"],a:2,e:"Ang Gantt chart ay ginagamit para makita ang schedule, process/time at progress. Maaari rin itong gamitin sa man-hour planning at capacity management.",k:"ガントチャート＝process・time・progress"},
+{q:"問題22 棚卸（たなおろし）に関する（かんする）記述（きじゅつ）として最も（もっとも）不適切（ふてきせつ）なものは、次（つぎ）のうちどれか。",
+c:["ア．棚卸（たなおろし）の目的（もくてき）の１つには、現品（げんぴん）数（すう）と帳簿（ちょうぼ）上（じょう）の数量（すうりょう）との照合（しょうごう）がある。","イ．定期（ていき）棚卸（たなおろし）の実施（じっし）の条件（じょうけん）として、入（にゅう）出庫（しゅっこ）中（ちゅう）に現品（げんぴん）数（すう）と帳簿（ちょうぼ）上（じょう）の数量（すうりょう）に相当（そうとう）数（すう）の差異（さい）が発見（はっけん）されたときがある。","ウ．在庫（ざいこ）把握（はあく）の精度（せいど）の高い（たかい）棚卸（たなおろし）方法（ほうほう）として、常時（じょうじ）棚卸（たなおろし）がある。","エ．棚卸（たなおろし）資産（しさん）の一般（いっぱん）的（てき）な評価（ひょうか）方法（ほうほう）として、先入（せんにゅう）先出（さきで）法（ほう）や移動（いどう）平均（へいきん）法（ほう）がある。"],a:1,e:"Ang 定期棚卸（ていきたなおろし） ay ginagawa sa regular na pagitan. Ang pagsasabing ang condition nito ay paghahanap ng discrepancy habang may incoming/outgoing movement ay mali.",k:"棚卸（たなおろし）＝paghahambing ng actual quantity at book quantity"},
+{q:"問題10 ロット生産（せいさん）に関する（かんする）記述（きじゅつ）として最も（もっとも）適切（てきせつ）なものは、次（つぎ）のうちどれか。",
+c:["ア．各（かく）製品（せいひん）の生産（せいさん）順序（じゅんじょ）や生産（せいさん）時間（じかん）が大幅（おおはば）に異なる（ことなる）場合（ばあい）に採用（さいよう）される形態（けいたい）である。","イ．同一（どういつ）の製品（せいひん）を、一定（いってい）期間（きかん）連続（れんぞく）して生産（せいさん）する形態（けいたい）である。","ウ．品種（ひんしゅ）ごとの生産（せいさん）量（りょう）をまとめて、複数（ふくすう）の製品（せいひん）を交互（こうご）に生産（せいさん）する形態（けいたい）である。","エ．個々（ここ）の注文（ちゅうもん）に応じ（おうじ）て、その都度（つど）１回（いっかい）限り（かぎり）の生産（せいさん）を行う（おこなう）形態（けいたい）である。"],a:2,e:"Ang lot production ay paggawa ng isang tiyak na quantity ng bawat product/variant bago lumipat sa ibang product. Ito ang tinutukoy na batch/lot production.",k:"ロット生産（せいさん）＝paggawa ng tiyak na quantity bilang isang lot"},
+{q:"問題18 設備（せつび）の劣化（れっか）に関する（かんする）記述（きじゅつ）として最も（もっとも）不適切（ふてきせつ）なものは、次（つぎ）のうちどれか。",
+c:["ア．設備（せつび）の性能（せいのう）劣化（れっか）の原因（げんいん）の１つには、管理（かんり）劣化（れっか）が含ま（ふくま）れる。","イ．使用（しよう）劣化（れっか）に対する（たいする）技術（ぎじゅつ）的（てき）対策（たいさく）には、設備（せつび）の耐熱（たいねつ）、耐圧（たいあつ）、耐震（たいしん）、防塵（ぼうじん）などがある。","ウ．設備（せつび）劣化（れっか）による生産（せいさん）量（りょう）の低下（ていか）の原因（げんいん）には、所期（しょき）の性能（せいのう）が発揮（はっき）されないこと、設備（せつび）故障（こしょう）によって生産（せいさん）が休止（きゅうし）することが挙げ（あげ）られる。","エ．設備（せつび）劣化（れっか）に対する（たいする）基本（きほん）的（てき）な防止（ぼうし）策（さく）には、日常（にちじょう）保全（ほぜん）、設備（せつび）検査（けんさ）、保全（ほぜん）計画（けいかく）等（とう）を実施（じっし）して行う（おこなう）ことが重要（じゅうよう）である。"],a:1,e:"Ang耐熱（たいねつ）・耐圧（たいあつ）・耐震（たいしん）・防塵（ぼうじん） ay higit na tumutukoy sa design/specification ng equipment, kaya mali ang pagkakalarawan dito bilang technical countermeasure sa use deterioration.",k:"劣化（れっか）＝管理劣化（かんりれっか）・使用劣化（しようれっか）; 日常保全（にちじょうほぜん）"},
+{q:"問題15 設備（せつび）管理（かんり）の考え方（かんがえかた）に関する（かんする）記述（きじゅつ）として最も（もっとも）不適切（ふてきせつ）なものは、次（つぎ）のうちどれか。",
+c:["ア．現代（げんだい）の設備（せつび）は、自動（じどう）化（か）、高（こう）性能（せいのう）化（か）、高速（こうそく）化（か）が進み（すすみ）、その結果（けっか）、生産（せいさん）性（せい）や収益（しゅうえき）性（せい）が大きく（おおきく）左右（さゆう）されるので、設備（せつび）の合理（ごうり）化（か）は重要（じゅうよう）な課題（かだい）である。","イ．設備（せつび）の保全（ほぜん）部門（ぶもん）の担当（たんとう）者（しゃ）は、設備（せつび）を運転（うんてん）している製造（せいぞう）担当（たんとう）者（しゃ）より、設備（せつび）の微小（びしょう）な異常（いじょう）や不具合（ふぐあい）の前兆（ぜんちょう）などに気付き（きづき）やすいので、保全（ほぜん）担当（たんとう）者（しゃ）による日常（にちじょう）点検（てんけん）が有効（ゆうこう）である。","ウ．設備（せつび）異常（いじょう）の早期（そうき）発見（はっけん）には、自主（じしゅ）保全（ほぜん）基準（きじゅん）を作成（さくせい）し、日常（にちじょう）的（てき）に自主（じしゅ）点検（てんけん）を行う（おこなう）ことが大切（たいせつ）である。","エ．設備（せつび）管理（かんり）の対象（たいしょう）は、設備（せつび）の計画（けいかく）から、それを設計（せっけい）、製作（せいさく）、調達（ちょうたつ）して運用（うんよう）し、保全（ほぜん）を経（へ）て、設備（せつび）の廃却（はいきゃく）や再（さい）利用（りよう）に至る（いたる）までの範囲（はんい）に及ん（およん）でいる。"],a:1,e:"Ang operator na mismong gumagamit ng equipment ang kadalasang unang nakakapansin ng maliliit na abnormality. Kaya mahalaga ang 自主保全（じしゅほぜん） at daily inspection ng operator.",k:"自主保全（じしゅほぜん）＝daily inspection ng operator"},
+{q:"問題1 生産（せいさん）システムに関する（かんする）記述（きじゅつ）として最も（もっとも）不適切（ふてきせつ）なものは、次（つぎ）のうちどれか。",
+c:["ア．生産（せいさん）システムにおけるデザインインは、調達（ちょうたつ）にかかわる業務（ぎょうむ）プロセスにおいて、量産（りょうさん）以降（いこう）で行わ（おこなわ）れる活動（かつどう）である。","イ．生産（せいさん）システムにおける製品（せいひん）設計（せっけい）の活動（かつどう）から得（え）られる部品（ぶひん）構成（こうせい）表（ひょう）は、生産（せいさん）管理（かんり）における種々（しゅじゅ）の管理（かんり）業務（ぎょうむ）に利用（りよう）される重要（じゅうよう）な情報（じょうほう）である。","ウ．生産（せいさん）システムにおける物流（ぶつりゅう）を調達（ちょうたつ）物流（ぶつりゅう）と販売（はんばい）物流（ぶつりゅう）とに分け（わけ）たとき、調達（ちょうたつ）物流（ぶつりゅう）には外注（がいちゅう）管理（かんり）の管理（かんり）業務（ぎょうむ）が含ま（ふくま）れる。","エ．生産（せいさん）システムには、製品（せいひん）企画（きかく）・設計（せっけい）システム、資材（しざい）・物流（ぶつりゅう）システム及び（および）製造（せいぞう）システムがある。"],a:0,e:"Ang Design-in ay ginagawa sa maagang stage ng product design/development para maisama ang suppliers o procurement side. Hindi ito activity na nagsisimula pagkatapos ng mass production.",k:"Design-in＝maagang pagsali ng suppliers/procurement sa design"},
+{q:"問題25 マテリアルハンドリングの原則（げんそく）として最も（もっとも）不適切（ふてきせつ）なものは、次（つぎ）のうちどれか。",
+c:["ア．ユニットロードの原則（げんそく）","イ．身体（しんたい）の使用（しよう）の原則（げんそく）","ウ．スペース活用（かつよう）の原則（げんそく）","エ．パレット化（か）の原則（げんそく）"],a:1,e:"Kasama sa material handling principles ang unit load, paggamit ng space at palletization. Ang “paggamit ng katawan” ay hindi tamang principle.",k:"MH（マテリアルハンドリング）＝unit load・space・pallet"},
+{q:"問題19 保全（ほぜん）効果（こうか）測定（そくてい）に関する（かんする）各種（かくしゅ）の指標（しひょう）の計算（けいさん）方法（ほうほう）として不適切（ふてきせつ）なものは、次（つぎ）のうちどれか。",
+c:["ア．故障（こしょう）度数（どすう）率（りつ）とは、故障（こしょう）件数（けんすう）を負荷（ふか）時間（じかん）で割っ（わっ）た百分率（ひゃくぶんりつ）である。","イ．１件（けん）当たり（あたり）保全（ほぜん）時間（じかん）とは、保全（ほぜん）所要（しょよう）時間（じかん）を保全（ほぜん）件（けん）数（すう）で割っ（わっ）たものである。","ウ．稼働（かどう）率（りつ）とは、実働（じつどう）時間（じかん）を負荷（ふか）時間（じかん）で割っ（わっ）た百分率（ひゃくぶんりつ）である。","エ．緊急（きんきゅう）保全（ほぜん）率（りつ）とは、緊急（きんきゅう）保全（ほぜん）件数（けんすう）を予防（よぼう）保全（ほぜん）件数（けんすう）で割っ（わっ）た百分率（ひゃくぶんりつ）である。"],a:3,e:"Ang emergency maintenance rate ay hindi dapat basta emergency maintenance cases ÷ preventive maintenance cases. Ang definition na iyon ang mali.",k:"稼働率（かどうりつ）＝実働時間（じつどうじかん）÷負荷時間（ふかじかん）×100"},
+{q:"問題13 以下（いか）に示す（しめす）＜現品（げんぴん）管理（かんり）＞の記述（きじゅつ）と＜語句（ごく）＞の組合せ（くみあわせ）として最も（もっとも）適切（てきせつ）なものは、次（つぎ）のうちどれか。",
+c:["ア．1：D  2：A  3：B  4：C","イ．1：A  2：B  3：C  4：D","ウ．1：D  2：A  3：C  4：B","エ．1：A  2：D  3：B  4：C"],a:0,e:"Ang 現品管理（げんぴんかんり） ay tungkol sa tamang quantity/identification, madaling storage at madaling transport. Kaya ang combination na 1-D, 2-A, 3-B, 4-C ang itinakdang sagot.",k:"現品管理（げんぴんかんり）＝quantity check・standard container・easy transport"},
+{q:"問題28 品質（ひんしつ）改善（かいぜん）の進め方（すすめかた）に関する（かんする）記述（きじゅつ）として最も（もっとも）不適切（ふてきせつ）なものは、次（つぎ）のうちどれか。",
+c:["ア．品質（ひんしつ）改善（かいぜん）は問題（もんだい）解決（かいけつ）と捉える（とらえる）こともでき、問題（もんだい）解決（かいけつ）は、現実（げんじつ）のレベルを目標（もくひょう）とするレベルに近づける（ちかづける）ことである。","イ．QCストーリーは、効果（こうか）的（てき）に改善（かいぜん）を進めて（すすめて）いくためのステップである。","ウ．品質（ひんしつ）改善（かいぜん）では、問題（もんだい）の真（しん）の原因（げんいん）を解決（かいけつ）することが重要（じゅうよう）であり、原因（げんいん）究明（きゅうめい）手法（しゅほう）としては、チェックシートによる分析（ぶんせき）が最も（もっとも）効果（こうか）的（てき）である。","エ．品質（ひんしつ）改善（かいぜん）において、真（しん）の原因（げんいん）解決（かいけつ）のための対策（たいさく）を実施（じっし）したとしても、歯止め（はどめ）が不充分（ふじゅうぶん）であると、問題（もんだい）が再発（さいはつ）することがある。"],a:2,e:"Ang paraan ng paghahanap ng tunay na cause ay depende sa problema. Hindi laging check sheet ang pinaka-epektibong method. Mahalaga rin ang QC Story at recurrence prevention.",k:"QCストーリー＝problem-solving steps; 歯止め（はどめ）＝prevention ng recurrence"},
+{q:"物流（ぶつりゅう）コストの管理（かんり）上（じょう）の分類（ぶんるい）とそれに含ま（ふくま）れる費目（ひもく）の組合せ（くみあわせ）として最も（もっとも）不適切（ふてきせつ）なものは、次（つぎ）のうちどれか。",
+c:["ア．変（へん）動（どう）・固定（こてい）別（べつ）分類（ぶんるい）：固定（こてい）物流（ぶつりゅう）費（ひ）","イ．機能（きのう）別（べつ）分類（ぶんるい）：包装（ほうそう）費（ひ）","ウ．主体（しゅたい）別（べつ）分類（ぶんるい）：自家（じか）物流（ぶつりゅう）費（ひ）","エ．領域（りょういき）別（べつ）分類（ぶんるい）：情報（じょうほう）処理（しょり）費（ひ）"],a:3,e:"Ang 情報処理費（じょうほうしょりひ）は kabilang sa functional classification ng logistics cost. Hindi ito ang tamang halimbawa ng area/domain classification.",k:"物流コスト＝variable/fixed・function・主体（しゅたい）・領域（りょういき）"},
+{q:"問題10 製品（せいひん）の流し方（ながしかた）による分類（ぶんるい）として最も（もっとも）適切（てきせつ）なものは、次（つぎ）のうちどれか。",
+c:["ア．製品（せいひん）の流し方（ながしかた）の分類（ぶんるい）には、見込み（みこみ）生産（せいさん）、ロット生産（せいさん）、連続（れんぞく）生産（せいさん）がある。","イ．１つひとつのロットに含ま（ふくま）れる数量（すうりょう）を大きく（おおきく）する場合（ばあい）には、工程（こうてい）間（かん）の仕掛（しかけ）品（ひん）が少なく（すくなく）なるため、生産（せいさん）期間（きかん）が短く（みじかく）なる傾向（けいこう）がある。","ウ．個別（こべつ）生産（せいさん）では、注文（ちゅうもん）ごとに異なる（ことなる）仕様（しよう）、数量（すうりょう）、納期（のうき）をもつ製品（せいひん）の生産（せいさん）について、限ら（かぎら）れた設備（せつび）能力（のうりょく）の下（した）で納期（のうき）を維持（いじ）し、生産（せいさん）設備（せつび）や作業（さぎょう）者（しゃ）の生産（せいさん）効率（こうりつ）を高める（たかめる）ような仕事（しごと）の流し方（ながしかた）を決める（きめる）。","エ．ロット生産（せいさん）とは、品種（ひんしゅ）ごとに生産（せいさん）量（りょう）をまとめて複数（ふくすう）の製品（せいひん）を交互（こうご）に生産（せいさん）する形態（けいたい）のことであり、１つひとつのロットに含ま（ふくま）れる適正（てきせい）な数量（すうりょう）を決める（きめる）ことをロットスケジューリングと呼ぶ（よぶ）。"],a:3,e:"Ang lot production ay nagbubuod ng quantity ayon sa product type at gumagawa nang salitan. Ang pagtukoy ng tamang lot quantity ay bahagi ng lot scheduling.",k:"ロット＝batch production; lot scheduling＝pagpaplano ng lot quantity at order"},
+{q:"問題26 品質（ひんしつ）管理（かんり）に関する（かんする）記述（きじゅつ）として適切（てきせつ）なものは、次（つぎ）のうちどれか。（TQMはTotal Quality Management、TQCはTotal Quality Control）",
+c:["ア．品質（ひんしつ）は、使用（しよう）目的（もくてき）を満たし（みたし）ているかどうかが重要（じゅうよう）であり、生産（せいさん）者（しゃ）が決定（けってい）するものではないとされている。","イ．1980年代（ねんだい）からTQMを基盤（きばん）として経営（けいえい）活動（かつどう）全体（ぜんたい）を扱う（あつかう）TQCが世界（せかい）的（てき）に広がっ（ひろがっ）ている。","ウ．企業（きぎょう）の社会（しゃかい）的（てき）責任（せきにん）として、企業（きぎょう）も経済（けいざい）だけでなく社会（しゃかい）や環境（かんきょう）などの要素（ようそ）にも責任（せきにん）を持つ（もつ）べきであるとされているが、品質（ひんしつ）に関して（かんして）は対象（たいしょう）外（がい）である。","エ．製造（せいぞう）物（ぶつ）責任（せきにん）法（ほう）には…（欠陥（けっかん）により他人（たにん）の生命（せいめい）・身体（しんたい）・財産（ざいさん）を侵害（しんがい）したときの責任（せきにん））…"],a:0,e:"Ang quality ay dapat tumugon sa purpose ng customer/user. Hindi ito simpleng bagay na unilateral na itinatakda lamang ng producer.",k:"品質（ひんしつ）＝pagtupad sa purpose ng user; TQM/TQC; PL法（ほう）"},
+{q:"問題3 IE（Industrial Engineering）手法（しゅほう）を適用（てきよう）して作業（さぎょう）の改善（かいぜん）を行う（おこなう）場合（ばあい）、改善（かいぜん）の目標（もくひょう）や考え方（かんがえかた）に関する（かんする）記述（きじゅつ）として最も（もっとも）適切（てきせつ）なものは、次（つぎ）のうちどれか。",
+c:["ア．動作（どうさ）分析（ぶんせき）の結果（けっか）から、円滑（えんかつ）な動作（どうさ）が実現（じつげん）できるように、第一（だいいち）類（るい）の動作（どうさ）と第二（だいに）類（るい）の動作（どうさ）とが交互（こうご）になる組合せ（くみあわせ）を検討（けんとう）する。","イ．時間（じかん）研究（けんきゅう）で用いる（もちいる）ストップウォッチにおいて、アナログ式（しき）ではレイティングが必要（ひつよう）となるが、デジタル式（しき）ではこれが不要（ふよう）となることから、デジタル式（しき）を用い（もちい）たほうが、改善（かいぜん）の問題（もんだい）点（てん）を発見（はっけん）しやすい。","ウ．稼働（かどう）分析（ぶんせき）の結果（けっか）だけでは、非（ひ）稼働（かどう）の原因（げんいん）は追求（ついきゅう）できないことから、非（ひ）稼働（かどう）の発生（はっせい）を取り除く（とりのぞく）改善（かいぜん）のためには、時間（じかん）研究（けんきゅう）による詳細（しょうさい）な分析（ぶんせき）が不可欠（ふかけつ）である。","エ．複数（ふくすう）の作業（さぎょう）者（しゃ）による組（くみ）作業（さぎょう）を改善（かいぜん）する場合（ばあい）には、手（て）待ち（まち）時間（じかん）を減らす（へらす）ために、連合（れんごう）作業（さぎょう）分析（ぶんせき）の結果（けっか）から、作業（さぎょう）の並行（へいこう）化（か）を図る（はかる）案（あん）を検討（けんとう）するとよい。"],a:3,e:"Kapag maraming worker ang gumagawa bilang isang team, ginagamit ang 連合作業分析（れんごうさぎょうぶんせき） para makita ang waiting time at pag-aralan kung paano mapapaparallel ang trabaho para mabawasan ang waste.",k:"IE＝pagbawas ng waste; 連合作業分析（れんごうさぎょうぶんせき）＝waiting time ng maraming worker"},
+{q:"問題39 環境（かんきょう）汚染（おせん）防止（ぼうし）に関する（かんする）記述（きじゅつ）として不適切（ふてきせつ）なものは、次（つぎ）のうちどれか。",
+c:["ア．大気（たいき）汚染（おせん）防止（ぼうし）法（ほう）では、移動（いどう）発生（はっせい）源（げん）である自動車（じどうしゃ）の排（はい）ガスに対する（たいする）規制（きせい）がある。","イ．典型（てんけい）7公害（こうがい）には、地盤（じばん）沈下（ちんか）や廃棄（はいき）物（ぶつ）処理（しょり）も含ま（ふくま）れる。","ウ．緊急（きんきゅう）事態（じたい）の対応（たいおう）には、必要（ひつよう）箇所（かしょ）への連絡（れんらく）、応急（おうきゅう）措置（そち）及び（および）再発（さいはつ）防止（ぼうし）がある。","エ．水質（すいしつ）汚濁（おだく）防止（ぼうし）法（ほう）は、工場（こうじょう）や家庭（かてい）からの排水（はいすい）が公共（こうきょう）用（よう）水域（すいいき）又は（または）地下（ちか）水へ流れ（ながれ）る排水（はいすい）を規制（きせい）する。"],a:1,e:"Ang 典型7公害（てんけいななこうがい） ay air pollution, water pollution, soil pollution, noise, vibration, land subsidence at bad odor. Hindi kasama rito ang waste disposal.",k:"典型7公害（てんけいななこうがい）＝大気（たいき）・水質（すいしつ）・土壌（どじょう）・騒音（そうおん）・振動（しんどう）・地盤沈下（じばんちんか）・悪臭（あくしゅう）"}
+];
+
+const quiz=document.getElementById("quiz");
+// Convert Japanese kanji（ふりがな） into compact ruby furigana.
+function addFurigana(text){
+  const furiganaMap = {
+    "問題":"もんだい","最も":"もっとも","無関係":"むかんけい","関係":"かんけい",
+    "同じ":"おなじ","繰り返し":"くりかえし","行う":"おこなう","合わせ":"あわせ",
+    "常に":"つねに","置く":"おく","変更":"へんこう","近く":"ちかく","運ぶ":"はこぶ",
+    "重力":"じゅうりょく","利用":"りよう","始め":"はじめ","含む":"ふくむ",
+    "見積もっ":"みつもっ","生じる":"しょうじる","考え":"かんがえ","見直し":"みなおし",
+    "引き下げ":"ひきさげ","組合せ":"くみあわせ","異なる":"ことなる","応じ":"おうじ",
+    "限ら":"かぎら","進め":"すすめ","示し":"しめし","表す":"あらわす","目盛り":"めもり",
+    "用い":"もちい","又は":"または","及び":"および","扱う":"あつかう","変わら":"かわら",
+    "取り入れ":"とりいれ","割っ":"わっ","当たり":"あたり","満たし":"みたし",
+    "広がっ":"ひろがっ","持つ":"もつ","除く":"のぞく","待ち":"まち","減らす":"へらす",
+    "図る":"はかる","至る":"いたる","大きく":"おおきく","少なく":"すくなく",
+    "短く":"みじかく","高める":"たかめる","決める":"きめる","呼ぶ":"よぶ",
+    "見込み":"みこみ","進捗":"しんちょく","現時点":"げんじてん"
+  };
+
+  // Protect readings that are already present in the source.
+  const saved = [];
+  text = text.replace(/([一-龯々〇ヶ]+)（([ぁ-ゖー]+)）/g, function(_, kanji, reading){
+    const token = "___FURI_" + saved.length + "___";
+    saved.push("<ruby>" + kanji + "<rt>" + reading + "</rt></ruby>");
+    return token;
+  });
+
+  Object.keys(furiganaMap).sort((a,b)=>b.length-a.length).forEach(function(word){
+    text = text.replaceAll(word, word + "（" + furiganaMap[word] + "）");
+  });
+
+  text = text.replace(/([一-龯々〇ヶ]+)（([ぁ-ゖー]+)）/g, '<ruby>$1<rt>$2</rt></ruby>');
+
+  saved.forEach(function(value, i){
+    text = text.replace("___FURI_" + i + "___", value);
+  });
+  return text;
+}
+// Randomize answer choices every time the exam is loaded / Try Again is pressed.
+// The correct-answer index is updated together with the choice.
+questions.forEach(x => {
+  const paired = x.c.map((choice, index) => ({
+    choice,
+    isCorrect: index === x.a
+  }));
+  for (let i = paired.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [paired[i], paired[j]] = [paired[j], paired[i]];
+  }
+  x.c = paired.map(item => item.choice);
+  x.a = paired.findIndex(item => item.isCorrect);
+});
+
+questions.forEach((x,i)=>{
+  const d=document.createElement("div"); d.className="question";
+  d.innerHTML=`<div><b>Q${i+1}</b></div><div class="jp">${addFurigana(x.q)}</div>
+  ${x.c.map((v,j)=>`<label class="choice"><input type="radio" name="q${i}" value="${j}"> ${addFurigana(v)}</label>`).join("")}
+  <div class="explanation" id="exp${i}"></div>`;
+  quiz.appendChild(d);
+});
+
+let remaining=EXAM_MINUTES*60, submitted=false;
+const timer=document.getElementById("timer");
+function tick(){
+  if(submitted)return;
+  const m=Math.floor(remaining/60),s=remaining%60;
+  timer.textContent=`${String(m).padStart(2,"0")}:${String(s).padStart(2,"0")}`;
+  if(remaining<=0){submitExam(true);return;}
+  remaining--;
+}
+setInterval(tick,1000); tick();
+
+function submitExam(auto=false){
+ if(submitted)return; submitted=true;
+ let score=0,answered=0;
+ questions.forEach((x,i)=>{
+   const sel=document.querySelector(`input[name="q${i}"]:checked`);
+   const box=document.querySelectorAll(".question")[i];
+   const exp=document.getElementById(`exp${i}`);
+   if(sel){answered++; if(Number(sel.value)===x.a){score++;box.classList.add("correct")}else box.classList.add("wrong");}
+   exp.style.display="block";
+   exp.innerHTML=`<b>Tamang sagot:</b> ${addFurigana(x.c[x.a])}<br><b>Explanation:</b> ${x.e}<br><b>Keyword:</b> ${addFurigana(x.k)}`;
+   document.querySelectorAll(`input[name="q${i}"]`).forEach(r=>r.disabled=true);
+ });
+ const pct=(score/questions.length*100).toFixed(1);
+ const result=document.getElementById("result");
+ result.style.display="block";
+ result.innerHTML=`<h2>Score: ${score} / ${questions.length} (${pct}%)</h2>
+ <p>Nasagutan: ${answered} • Hindi nasagutan: ${questions.length-answered}</p>
+ ${auto?"<p><b>⏰ Time is up — automatic submit.</b></p>":""}
+ <button onclick="location.reload()">Try Again</button>`;
+ window.scrollTo({top:0,behavior:"smooth"});
+}
+document.getElementById("submit").onclick=()=>submitExam(false);
+</script>
+</body>
+</html>
